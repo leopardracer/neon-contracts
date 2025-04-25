@@ -3,12 +3,13 @@ const { expect } = require("chai");
 const web3 = require("@solana/web3.js");
 const { getAccount, TOKEN_PROGRAM_ID, ACCOUNT_SIZE } = require("@solana/spl-token");
 const { deployContract, airdropSOL } = require("./utils");
+const config = require("./config");
 
 describe('\u{1F680} \x1b[36mSystem program composability tests\x1b[33m',  async function() {
 
     console.log("Network name: " + network.name)
 
-    const solanaConnection = new web3.Connection(process.env.SVM_NODE, "processed")
+    const solanaConnection = new web3.Connection(config.svm_node[network.name], "processed")
 
     const ZERO_AMOUNT = BigInt(0)
     const ZERO_BYTES32 = Buffer.from('0000000000000000000000000000000000000000000000000000000000000000', 'hex')

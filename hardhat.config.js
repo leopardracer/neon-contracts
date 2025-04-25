@@ -50,7 +50,7 @@ module.exports = {
   },
   networks: {
     curvestand: {
-      url: process.env.NEON_EVM_NODE,
+      url: "https://curve-stand.neontest.xyz",
       accounts: [process.env.PRIVATE_KEY_OWNER, process.env.USER1_KEY],
       allowUnlimitedContractSize: false,
       gasMultiplier: 2,
@@ -73,14 +73,6 @@ module.exports = {
       allowUnlimitedContractSize: false,
       gas: "auto",
       gasPrice: "auto",
-    },
-    curvestand: {
-        url: process.env.EVM_NODE,
-        accounts: [process.env.PRIVATE_KEY_OWNER, process.env.USER1_KEY, process.env.USER2_KEY, process.env.USER3_KEY],
-        allowUnlimitedContractSize: false,
-        gasMultiplier: 2,
-        maxFeePerGas: 10000,
-        maxPriorityFeePerGas: 5000
     },
   },
   mocha: {

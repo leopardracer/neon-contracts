@@ -16,7 +16,7 @@ const { Metaplex } = require("@metaplex-foundation/js");
 const { createCreateMetadataAccountV3Instruction } = require("@metaplex-foundation/mpl-token-metadata");
 const bs58 = require("bs58");
 const config = require("./config")
-const connection = new web3.Connection(process.env.SVM_NODE, "processed");
+const connection = new web3.Connection(config.svm_node[network.name], "processed");
 
 async function asyncTimeout(timeout) {
     return new Promise((resolve) => {
@@ -25,7 +25,7 @@ async function asyncTimeout(timeout) {
 }
 
 async function airdropNEON(address, amount) {
-    await fetch(process.env.FAUCET, {
+    await fetch(config.neon_faucet[network.name].url, {
         method: 'POST',
         body: JSON.stringify({"amount": amount, "wallet": address}),
         headers: { 'Content-Type': 'application/json' }
@@ -36,7 +36,7 @@ async function airdropNEON(address, amount) {
 
 async function airdropSOL(pubKey, amount) {
     const params = [pubKey, amount]
-    const res = await fetch(process.env.SVM_NODE, {
+    const res = await fetch(config.svm_node[network.name], {
         method: 'POST',
         body: JSON.stringify({"jsonrpc":"2.0", "id":1, "method": "requestAirdrop", "params": params}),
         headers: { 'Content-Type': 'application/json' }
@@ -52,7 +52,7 @@ async function deployContract(contractName, contractAddress = null) {
     if (!process.env.USER1_KEY) {
         throw new Error("\nMissing private key: USER1_KEY")
     }
-    const minBalance = ethers.parseUnits("10000", 18) // 10000 NEON
+    const minBalance = config.neon_faucet[network.name].min_balance
     const deployer = (await ethers.getSigners())[0]
     let deployerBalance = BigInt(await ethers.provider.getBalance(deployer.address))
     if(
@@ -93,7 +93,7 @@ async function deployContract(contractName, contractAddress = null) {
 }
 
 async function getSolanaTransactions(neonTxHash) {
-    return await fetch(process.env.EVM_NODE, {
+    return await fetch(network.config.url, neonTxHash, {
         method: 'POST',
         body: JSON.stringify({
             "jsonrpc":"2.0",
